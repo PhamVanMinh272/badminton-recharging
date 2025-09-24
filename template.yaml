@@ -1,0 +1,106 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Badminton Recharging System
+
+Globals:
+  Function:
+    Timeout: 20
+    MemorySize: 128
+    Runtime: python3.11
+    Environment:
+      Variables:
+        ENV: aws
+    LoggingConfig:
+      LogFormat: JSON
+Resources:
+  BadmintonRechargingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: S3AccessPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+#                Resource: !Sub '${ProductsS3.Arn}/*'
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+
+  ApiBadmintonRechargingDeployment:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      Cors:
+        AllowMethods: "'OPTIONS,POST,GET,PUT,DELETE'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+        AllowOrigin: "'*'"
+
+
+  #  DefaultCachePolicy:
+#    Type: AWS::CloudFront::CachePolicy
+#    Properties:
+#      CachePolicyConfig:
+#        Name: DefaultCachePolicy
+#        DefaultTTL: 3600
+#        MinTTL: 0
+#        MaxTTL: 86400
+#        ParametersInCacheKeyAndForwardedToOrigin:
+#          EnableAcceptEncodingGzip: true
+#          HeadersConfig:
+#            HeaderBehavior: none  # Or 'whitelist', and specify headers if needed
+#          CookiesConfig:
+#            CookieBehavior: none  # Or 'whitelist', and specify cookies if needed
+#          QueryStringsConfig:
+#            QueryStringBehavior: all  # Or 'whitelist', and specify query strings
+
+  SwaggerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./swagger
+      Handler: main.lambda_handler
+      Architectures:
+        - x86_64
+      Events:
+        SwaggerGet:
+          Type: Api
+          Properties:
+            Path: /swagger-ui
+            Method: get
+            RestApiId: !Ref ApiBadmintonRechargingDeployment
+
+  SessionsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !GetAtt BadmintonRechargingRole.Arn
+      CodeUri: ./
+      Handler: lambda_api/sessions.lambda_handler
+      Architectures:
+        - x86_64
+      Events:
+        postCalcCost:
+          Type: Api
+          Properties:
+            Path: /sessions/calc-cost
+            Method: post
+            RestApiId: !Ref ApiBadmintonRechargingDeployment

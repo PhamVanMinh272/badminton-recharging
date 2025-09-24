@@ -1,16 +1,39 @@
-# This is a sample Python script.
+# main.py
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from fast_api.sessions import session_router
+from fast_api.players import players_router
 
+app = FastAPI()
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+app.include_router(session_router)
+
+app.include_router(players_router)
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# You can also include routers within other routers
+# from routers import users
+# app.include_router(users.router)
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm') 
+
+    print('PyCharm')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
