@@ -67,6 +67,25 @@
     tr:hover {
       background-color: #f1f1f1;
     }
+
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      font-size: 16px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+    select:focus {
+      border-color: #0078D4;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 120, 212, 0.5);
+    }
   </style>
 </head>
 <body>
@@ -74,8 +93,17 @@
 <h2>Session Cost Calculator</h2>
 
 <form id="costForm">
+  <label for="billingType">Billing Type:</label>
+  <select id="billingType" required>
+    <option value="weighted">Weighted</option>
+    <option value="equally">Equally</option>
+  </select>
+
   <label for="players">Players (comma-separated):</label>
   <input type="text" id="players" placeholder="Đạt, Thảo, Văn, Huy, Vu, Thinh" required>
+
+  <label for="numberOfPlayers" style="display:none;">Number of Players:</label>
+  <input type="number" id="numberOfPlayers" placeholder="5" style="display:none;">
 
   <label for="rentalCost">Rental Cost:</label>
   <input type="number" id="rentalCost" placeholder="200" required>
@@ -101,9 +129,30 @@
 </table>
 
 <script>
-  document.getElementById('costForm').addEventListener('submit', async function(e) {
+  const billingTypeSelect = document.getElementById('billingType');
+  const numberOfPlayersLabel = document.querySelector('label[for="numberOfPlayers"]');
+  const numberOfPlayersInput = document.getElementById('numberOfPlayers');
+  const playersLabel = document.querySelector('label[for="players"]');
+  const playersInput = document.getElementById('players');
+
+  billingTypeSelect.addEventListener('change', function () {
+    if (this.value === 'equally') {
+      numberOfPlayersLabel.style.display = 'block';
+      numberOfPlayersInput.style.display = 'block';
+      playersLabel.style.display = 'none';
+      playersInput.style.display = 'none';
+    } else {
+      numberOfPlayersLabel.style.display = 'none';
+      numberOfPlayersInput.style.display = 'none';
+      playersLabel.style.display = 'block';
+      playersInput.style.display = 'block';
+    }
+  });
+
+  document.getElementById('costForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
+    const billingType = billingTypeSelect.value;
     const players = document.getElementById('players').value.split(',').map(p => p.trim());
     const rentalCost = parseFloat(document.getElementById('rentalCost').value);
     const shuttleAmount = parseInt(document.getElementById('shuttleAmount').value);
@@ -116,9 +165,19 @@
       shuttlePrice
     };
 
+    let url = 'http://127.0.0.1:5000/sessions/calc-cost-weighted'; // Default to weighted
+
+    if (billingType === 'equally') {
+      const numberOfPlayers = parseInt(numberOfPlayersInput.value);
+      if (!numberOfPlayers) {
+        alert('Number of Players is required for Equally billing type.');
+        return;
+      }
+      payload.numberOfPlayers = numberOfPlayers;
+      url = 'http://127.0.0.1:5000/sessions/calc-cost-equally';
+    }
+
     try {
-      const url = 'http://127.0.0.1:5000/sessions/calc-cost-weighted'; // Local testing URL
-<!--      const url = 'https://nno3q5ecp6.execute-api.us-west-2.amazonaws.com/Stage/sessions/calc-cost-weighted'; // Production URL-->
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

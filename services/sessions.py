@@ -15,11 +15,12 @@ class Session:
         self._session_cost_model = session_cost_model
 
         # self.players = players
-        self._active_players = [{"name": name} for name in self._session_cost_model.players]
-        # retreive weight from players list
-        for player in self._active_players:
-            if player.get("name") in players:
-                player.update(players[player.get("name")])
+        if billing_type is BillingTypes.WEIGHTED:
+            self._active_players = [{"name": name} for name in self._session_cost_model.players]
+            # retreive weight from players list
+            for player in self._active_players:
+                if player.get("name") in players:
+                    player.update(players[player.get("name")])
         self.billing_type = billing_type
         self.date = None
 

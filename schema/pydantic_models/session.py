@@ -16,5 +16,5 @@ class SessionCreate(SessionCost):
 
 
 class SessionCostEqually(SessionCost):
-    numberPlayers: int
+    numberOfPlayers: int
 
