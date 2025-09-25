@@ -1,6 +1,6 @@
 import json
 
-from api_logic.sessions import calc_cost_api_logic, get_session
+from api_logic import sessions
 from common.api_utils import exception_handler
 
 
@@ -8,10 +8,11 @@ from common.api_utils import exception_handler
 def lambda_handler(event, context):
 
     get_paths = {
-        "/sessions": get_session,
+        "/sessions": sessions.get_session,
     }
     post_paths = {
-        "/sessions/calc-cost": calc_cost_api_logic,
+        "/sessions/calc-cost-weighted": sessions.calc_cost_api_logic,
+        "/sessions/calc-cost-equally": sessions.calc_cost_equally,
     }
 
     path = event.get("path", "")

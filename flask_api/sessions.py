@@ -1,14 +1,20 @@
 from flask import request, Blueprint
 
-from api_logic.sessions import calc_cost_api_logic, get_session
+from api_logic import sessions
 
 session_router = Blueprint('session', __name__)
 
 @session_router.route('', methods=['GET'])
 def get_session_route():
-    return get_session()
+    return sessions.get_session()
 
-@session_router.route('/calc-cost', methods=['POST'])
-def calc_cost():
+@session_router.route('/calc-cost-weighted', methods=['POST'])
+def calc_cost_weighted():
     data = request.json
-    return calc_cost_api_logic(**data)
+    return sessions.calc_cost_api_logic(**data)
+
+@session_router.route('/calc-cost-equally', methods=['POST'])
+def calc_cost_equally():
+    data = request.json
+    return sessions.calc_cost_equally(**data)
+
