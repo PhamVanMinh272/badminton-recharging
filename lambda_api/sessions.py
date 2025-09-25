@@ -1,25 +1,8 @@
-import datetime
 import json
 
-from fast_api.sessions import get_session
-from schema.pydantic_models.session import SessionCreate
-from services.sessions import Session
+from api_logic.sessions import calc_cost_api_logic, get_session
 from common.api_utils import exception_handler
 
-
-def calc_cost_func(**kwargs):
-    session_data = SessionCreate(**kwargs)
-    session = Session(session_data.players)
-    cost = session.cost_amount(
-        rental_cost=session_data.rentalCost,
-        shuttle_amount=session_data.shuttleAmount,
-        shuttle_price=session_data.shuttlePrice
-    )
-
-    return {"data": {
-        "cost": session.cost_per_person(cost),
-        "sessionDate": datetime.date.today().strftime("%Y-%m-%d")
-    }}
 
 @exception_handler
 def lambda_handler(event, context):
@@ -28,7 +11,7 @@ def lambda_handler(event, context):
         "/sessions": get_session,
     }
     post_paths = {
-        "/sessions/calc-cost": calc_cost_func,
+        "/sessions/calc-cost": calc_cost_api_logic,
     }
 
     path = event.get("path", "")

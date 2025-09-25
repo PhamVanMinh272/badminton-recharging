@@ -1,21 +1,16 @@
-# routers/items.py
 import datetime
 
-from fastapi import APIRouter
-from services.sessions import Session
 from schema.pydantic_models.session import SessionCreate
+from services.sessions import Session
 
-session_router = APIRouter(prefix="/sessions", tags=["Session"])
+def get_session(**kwargs):
+    return {"data": {
+        "message": "Session endpoint is working",
+        "sessionDate": datetime.date.today().strftime("%Y-%m-%d")
+    }}
 
-#
-@session_router.get("/")
-async def get_session():
-    return {"message": "Reading items"}
-
-
-@session_router.post("/calc-cost")
-async def calc_cost(session_data: SessionCreate):
-
+def calc_cost_api_logic(**kwargs):
+    session_data = SessionCreate(**kwargs)
     session = Session(session_data.players)
     cost = session.cost_amount(
         rental_cost=session_data.rentalCost,
