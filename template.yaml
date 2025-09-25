@@ -98,9 +98,22 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        postCalcCost:
+        getSessionTemplates:
           Type: Api
           Properties:
-            Path: /sessions/calc-cost
+            Path: /sessions/templates
+            Method: get
+            RestApiId: !Ref ApiBadmintonRechargingDeployment
+        postCalcCostEqually:
+          Type: Api
+          Properties:
+            Path: /sessions/calc-cost-equally
             Method: post
             RestApiId: !Ref ApiBadmintonRechargingDeployment
+        postCalcCostWeighted:
+          Type: Api
+          Properties:
+            Path: /sessions/calc-cost-weighted
+            Method: post
+            RestApiId: !Ref ApiBadmintonRechargingDeployment
+

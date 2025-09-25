@@ -4,9 +4,9 @@ from api_logic import sessions
 
 session_router = Blueprint('session', __name__)
 
-@session_router.route('', methods=['GET'])
-def get_session_route():
-    return sessions.get_session()
+@session_router.route('/templates', methods=['GET'])
+def get_session_templates():
+    return sessions.get_session_templates()
 
 @session_router.route('/calc-cost-weighted', methods=['POST'])
 def calc_cost_weighted():

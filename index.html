@@ -105,11 +105,25 @@
         font-size: 1.3em;
       }
     }
+
+  /* Shuttle Amount Field Styling */
+  .single-shuttle-button {
+    margin-top:5px
+   }
+
   </style>
 </head>
 <body>
 
 <h2>Session Cost Calculator</h2>
+
+<div id="templateSelector" style="margin-bottom:20px;">
+  <label for="sessionTemplate">Session Template:</label>
+  <select id="sessionTemplate">
+    <option value="">-- Select a template --</option>
+  </select>
+</div>
+
 
 <form id="costForm">
   <label for="billingType">Billing Type:</label>
@@ -127,8 +141,16 @@
   <label for="rentalCost">Rental Cost:</label>
   <input type="number" id="rentalCost" placeholder="200" required>
 
+<!--  <label for="shuttleAmount">Shuttle Amount:</label>-->
+<!--  <input type="number" id="shuttleAmount" placeholder="3" required>-->
   <label for="shuttleAmount">Shuttle Amount:</label>
-  <input type="number" id="shuttleAmount" placeholder="3" required>
+<div style="display:flex; align-items:center;">
+  <input type="number" id="shuttleAmount" placeholder="3" required style="flex:1;">
+  <div style="margin-left: 20px; display:flex; gap:5px; justify-content:flex-end;">
+    <button class="single-shuttle-button" type="button" id="shuttleMinus" style="width:32px;">-</button>
+    <button class="single-shuttle-button" type="button" id="shuttlePlus" style="width:32px;">+</button>
+  </div>
+</div>
 
   <label for="shuttlePrice">Shuttle Price:</label>
   <input type="number" id="shuttlePrice" placeholder="26" required>
@@ -148,6 +170,9 @@
 </table>
 
 <script>
+<!--  const SERVER_URL = 'http://127.0.0.1:5000';-->
+  const SERVER_URL = 'https://nno3q5ecp6.execute-api.us-west-2.amazonaws.com/Stage';
+
   const billingTypeSelect = document.getElementById('billingType');
   const numberOfPlayersLabel = document.querySelector('label[for="numberOfPlayers"]');
   const numberOfPlayersInput = document.getElementById('numberOfPlayers');
@@ -184,7 +209,7 @@
       shuttlePrice
     };
 
-    let url = 'http://127.0.0.1:5000/sessions/calc-cost-weighted'; // Default to weighted
+    let url = `${SERVER_URL}/sessions/calc-cost-weighted`; // Default to weighted
 
     if (billingType === 'equally') {
       const numberOfPlayers = parseInt(numberOfPlayersInput.value);
@@ -193,7 +218,7 @@
         return;
       }
       payload.numberOfPlayers = numberOfPlayers;
-      url = 'http://127.0.0.1:5000/sessions/calc-cost-equally';
+      url = `${SERVER_URL}/sessions/calc-cost-equally`;
     }
 
     try {
@@ -223,6 +248,57 @@
       alert('Error calculating cost. Check console for details.');
       console.error(error);
     }
+  });
+
+<!--  Session template-->
+  async function loadTemplates() {
+    try {
+      const res = await fetch(`${SERVER_URL}/sessions/templates`);
+      const result = await res.json();
+      const templates = result.data;
+      const select = document.getElementById('sessionTemplate');
+      templates.forEach(t => {
+        const option = document.createElement('option');
+        option.value = t.id;
+        option.textContent = t.name;
+        option.dataset.template = JSON.stringify(t);
+        select.appendChild(option);
+      });
+    } catch (err) {
+      console.error('Failed to load templates', err);
+    }
+  }
+
+  document.getElementById('sessionTemplate').addEventListener('change', function() {
+    const selected = this.options[this.selectedIndex];
+    if (!selected.value) return;
+    const template = JSON.parse(selected.dataset.template);
+    document.getElementById('billingType').value = template.billingType === 1 ? 'weighted' : 'equally';
+    document.getElementById('players').value = template.players.join(', ');
+    document.getElementById('rentalCost').value = template.rentalCost;
+    document.getElementById('shuttleAmount').value = template.shuttleAmount;
+    document.getElementById('shuttlePrice').value = template.shuttlePrice;
+    // If equally, set numberOfPlayers
+    if (template.billingType == 1) {
+      document.getElementById('numberOfPlayers').value = template.players.length;
+    }
+    // Trigger billingType change to show/hide fields
+    document.getElementById('billingType').dispatchEvent(new Event('change'));
+  });
+
+  window.addEventListener('DOMContentLoaded', loadTemplates);
+
+<!--  Shuttle amount buttons-->
+  document.getElementById('shuttleMinus').addEventListener('click', function() {
+  const input = document.getElementById('shuttleAmount');
+  let value = parseInt(input.value) || 0;
+  if (value > 0) input.value = value - 1;
+  });
+
+  document.getElementById('shuttlePlus').addEventListener('click', function() {
+    const input = document.getElementById('shuttleAmount');
+    let value = parseInt(input.value) || 0;
+    input.value = value + 1;
   });
 </script>
 

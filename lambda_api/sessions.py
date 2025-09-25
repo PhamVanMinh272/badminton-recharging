@@ -8,7 +8,7 @@ from common.api_utils import exception_handler
 def lambda_handler(event, context):
 
     get_paths = {
-        "/sessions": sessions.get_session,
+        "/sessions/templates": sessions.get_session_templates,
     }
     post_paths = {
         "/sessions/calc-cost-weighted": sessions.calc_cost_api_logic,
@@ -17,7 +17,7 @@ def lambda_handler(event, context):
 
     path = event.get("path", "")
     method = event.get("httpMethod", "GET")
-    body = json.loads(event.get("body", "{}"))
+    body = json.loads(event.get("body", "{}") or "{}")
     if method == "GET":
         paths = get_paths
     elif method == "POST":
