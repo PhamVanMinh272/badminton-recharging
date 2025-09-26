@@ -111,11 +111,34 @@
     margin-top:5px
    }
 
+  /* Add to your <style> section */
+  #errorMsg {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 300px;
+    max-width: 80vw;
+    color: #fff;
+    background: #DC3545;
+    border-radius: 5px;
+    padding: 14px 20px;
+    box-shadow: 0 2px 8px rgba(231,76,60,0.15);
+    display: none;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
+
+
   </style>
 </head>
 <body>
 
 <h2>Session Cost Calculator</h2>
+
+<!-- Place this inside <body> -->
+<div id="errorMsg" style="display:none;"></div>
 
 <div id="templateSelector" style="margin-bottom:20px;">
   <label for="sessionTemplate">Session Template:</label>
@@ -195,6 +218,7 @@
 
   document.getElementById('costForm').addEventListener('submit', async function (e) {
     e.preventDefault();
+    hideError();
 
     const billingType = billingTypeSelect.value;
     const players = document.getElementById('players').value.split(',').map(p => p.trim());
@@ -229,6 +253,14 @@
       });
 
       const result = await response.json();
+
+      if (result.message) {
+        showError(result.message);
+        document.getElementById('costTable').style.display = 'none';
+        document.getElementById('sessionDate').textContent = '';
+        return;
+      }
+
       const data = result.data;
 
       document.getElementById('sessionDate').textContent = `Session Date: ${data.sessionDate}`;
@@ -245,7 +277,7 @@
       document.getElementById('costTable').style.display = 'table';
 
     } catch (error) {
-      alert('Error calculating cost. Check console for details.');
+      showError('Error calculating cost. Check console for details.');
       console.error(error);
     }
   });
@@ -273,7 +305,10 @@
     const selected = this.options[this.selectedIndex];
     if (!selected.value) return;
     const template = JSON.parse(selected.dataset.template);
-    document.getElementById('billingType').value = template.billingType === 1 ? 'weighted' : 'equally';
+<!--    document.getElementById('billingType').value = template.billingType === 1 ? 'weighted' : 'equally';-->
+    document.getElementById('billingType').value =
+      template.billingType === 1 ? 'equally' :
+      template.billingType === 3 ? 'weighted' : '';
     document.getElementById('players').value = template.players.join(', ');
     document.getElementById('rentalCost').value = template.rentalCost;
     document.getElementById('shuttleAmount').value = template.shuttleAmount;
@@ -300,6 +335,30 @@
     let value = parseInt(input.value) || 0;
     input.value = value + 1;
   });
+
+  // Replace your showError function with this
+let errorTimeout;
+function showError(message) {
+  const errorMsg = document.getElementById('errorMsg');
+  errorMsg.textContent = message;
+  errorMsg.style.display = 'block';
+  errorMsg.style.opacity = '1';
+  clearTimeout(errorTimeout);
+  errorTimeout = setTimeout(() => {
+    errorMsg.style.opacity = '0';
+    setTimeout(() => {
+      errorMsg.style.display = 'none';
+      errorMsg.textContent = '';
+    }, 300);
+  }, 10000);
+}
+
+  function hideError() {
+    const errorMsg = document.getElementById('errorMsg');
+    errorMsg.textContent = '';
+    errorMsg.style.display = 'none';
+  }
+
 </script>
 
 </body>
