@@ -25,6 +25,48 @@ class SessionCost(BaseModel):
 class SessionCostWeighted(SessionCost):
     players: Annotated[list[str], AfterValidator(is_unique_items_list)]
 
+    @computed_field
+    @property
+    def weighted_data(self) -> list[float]:
+        """
+        self.players = [
+        "Minh", "An-0.8", "John"
+        ]
+        return [1, 0.8, 1]
+        Remove weighted from name
+        :return:
+        """
+        weighted_list = []
+        new_names = []
+        for player in self.players:
+            if "-" in player:
+                name, weight_str = player.split("-")
+                new_names.append(name.strip())
+                try:
+                    weight = float(weight_str)
+                except ValueError:
+                    weight = 1.0
+                weighted_list.append(weight)
+            else:
+                weighted_list.append(1.0)
+                new_names.append(player.strip())
+        # TODO: update players name more cleanly
+        self.players = new_names
+        return weighted_list
+
+    def check_players_unique(self):
+        is_unique_items_list(self.players)
+
+    def clean_players(self):
+        """Remove weight from names"""
+        new_names = []
+        for player in self.players:
+            name = player
+            if "-" in player:
+                name, weight_str = player.split("-")
+            new_names.append(name.strip())
+        self.players = new_names
+
 
 class SessionCostEqually(SessionCost):
     numberOfPlayers: int

@@ -57,12 +57,16 @@ class PracticeSessionService:
 
         # self.players = players
         if billing_type is BillingTypes.WEIGHTED:
+            weighted = self._session_cost_model.weighted_data
+            self._session_cost_model.clean_players()
+            self._session_cost_model.check_players_unique()
+
             self._active_players = [
-                {"name": name} for name in self._session_cost_model.players
+                {"name": name, "weight": weight} if weight != 1 else {"name": name} for name, weight in zip(self._session_cost_model.players, weighted)
             ]
             # retreive weight from players list
             for player in self._active_players:
-                if player.get("name") in players:
+                if player.get("name") in players and "weight" not in player.keys():
                     player.update(players[player.get("name")])
         self.billing_type = billing_type
         self.date = None
@@ -105,6 +109,7 @@ class PracticeSessionService:
         return {"Per Person": base_cost_per_person}
 
     def _calc_cost_weighted(self) -> dict:
+        print(self._active_players)
         base_cost_per_person = math.ceil(
             self._session_cost_model.total_cost / len(self._active_players)
         )
