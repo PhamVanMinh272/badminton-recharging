@@ -58,16 +58,20 @@
         "type": "object",
         "properties": {
           "numberOfPlayers": {
-            "type": "integer"
+            "type": "integer",
+            "example": 6
           },
           "rentalCost": {
-            "type": "integer"
+            "type": "integer",
+            "example": 200
           },
           "shuttleAmount": {
-            "type": "integer"
+            "type": "integer",
+            "example": 3
           },
           "shuttlePrice": {
-            "type": "integer"
+            "type": "integer",
+            "example": 25
           }
         }
       },
@@ -78,16 +82,20 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "example": ["Alice", "Bob", "Charlie", "David", "Eve", "Frank"]
           },
           "rentalCost": {
-            "type": "integer"
+            "type": "integer",
+            "example": 200
           },
           "shuttleAmount": {
-            "type": "integer"
+            "type": "integer",
+            "example": 3
           },
           "shuttlePrice": {
-            "type": "integer"
+            "type": "integer",
+            "example": 25
           }
         }
       }

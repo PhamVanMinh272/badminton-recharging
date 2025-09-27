@@ -71,7 +71,7 @@ Resources:
         SwaggerGet:
           Type: Api
           Properties:
-            Path: /api/swagger-ui
+            Path: /api/swagger
             Method: get
             RestApiId: !Ref ApiBadmintonRechargingDeployment
 
