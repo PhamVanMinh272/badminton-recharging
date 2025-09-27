@@ -1,10 +1,10 @@
-from flask import request, Blueprint
+from flask import Blueprint
 
-from api_logic import sessions
+from api_logic import players
 
 players_router = Blueprint('player', __name__)
 
 @players_router.route('', methods=['GET'])
 def get_players():
-    return sessions.get_session()
+    return players.get_players()
 

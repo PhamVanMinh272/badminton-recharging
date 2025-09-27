@@ -50,8 +50,14 @@
         },
         "responses": {}
       }
-    }
     },
+    "/players" : {
+      "get" : {
+        "tags": ["Players"],
+        "responses": {}
+      }
+    }
+  },
   "components" : {
     "schemas": {
       "sessionCalcCostEqually": {

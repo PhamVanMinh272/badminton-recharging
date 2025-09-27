@@ -10,15 +10,12 @@ Globals:
     Runtime: python3.11
     Environment:
       Variables:
-        ENV: aws
+        ENV: dev
     LoggingConfig:
       LogFormat: JSON
   HttpApi:
     Auth:
       Authorizer: NONE
-  Environment:
-    Variables:
-      ENV: dev
 
 Resources:
   BadmintonRechargingRole:
@@ -193,6 +190,7 @@ Resources:
       Role: !GetAtt BadmintonRechargingRole.Arn
       CodeUri: ./
       Handler: lambda_api/efs_handler.lambda_handler
+      Timeout: 100
       Architectures:
         - x86_64
       VpcConfig:
