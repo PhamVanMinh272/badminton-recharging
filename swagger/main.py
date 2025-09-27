@@ -9,7 +9,7 @@ logger = getLogger(__name__)
 
 
 def lambda_handler(event, context):
-    with open("snail-dev-oas30.json") as f:
+    with open("openapi_spec.json") as f:
         swagger_doc = f.read()
         logger.info("Read file")
 

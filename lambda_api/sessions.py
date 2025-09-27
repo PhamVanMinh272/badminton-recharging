@@ -2,21 +2,23 @@ import json
 
 from api_logic import sessions
 from common.api_utils import exception_handler
+from settings import logger
 
 
 @exception_handler
 def lambda_handler(event, context):
 
     get_paths = {
-        "/sessions/templates": sessions.get_session_templates,
-        "/sessions/billing-types": sessions.get_billing_types,
+        "/api/sessions/templates": sessions.get_session_templates,
+        "/api/sessions/billing-types": sessions.get_billing_types,
     }
     post_paths = {
-        "/sessions/calc-cost-weighted": sessions.calc_cost_api_logic,
-        "/sessions/calc-cost-equally": sessions.calc_cost_equally,
+        "/api/sessions/calc-cost-weighted": sessions.calc_cost_api_logic,
+        "/api/sessions/calc-cost-equally": sessions.calc_cost_equally,
     }
 
     path = event.get("path", "")
+    logger.info(f"Path: {path}")
     method = event.get("httpMethod", "GET")
     body = json.loads(event.get("body", "{}") or "{}")
     if method == "GET":
@@ -38,8 +40,9 @@ if __name__ == '__main__':
             "players": [
                 "Đạt", "Thảo", "Văn", "Huy", "Vu", "Thinh"
             ],
+            "numberOfPlayers": 6,
             "rentalCost": 200, "shuttleAmount": 3, "shuttlePrice": 26}),
-        "path": "/sessions/calc-cost",
+        "path": "/api/sessions/calc-cost-equally",
         "httpMethod": "POST"
     }
     response = lambda_handler(event, None)

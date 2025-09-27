@@ -11,7 +11,7 @@ SESSION_TEMPLATE_DATA = [
     {
         "id": 1,
         "name": "Wednesday Regular",
-        "billingType": BillingTypes.EQUALLY,
+        "billingType": BillingTypes.EQUALLY.value,
         "rentalCost": 220,
         "shuttleAmount": 4,
         "shuttlePrice": 305,
@@ -20,7 +20,7 @@ SESSION_TEMPLATE_DATA = [
     {
         "id": 2,
         "name": "Sunday Regular",
-        "billingType": BillingTypes.EQUALLY,
+        "billingType": BillingTypes.EQUALLY.value,
         "rentalCost": 200,
         "shuttleAmount": 4,
         "shuttlePrice": 305,
@@ -29,7 +29,7 @@ SESSION_TEMPLATE_DATA = [
     {
         "id": 3,
         "name": "Friday",
-        "billingType": BillingTypes.WEIGHTED,
+        "billingType": BillingTypes.WEIGHTED.value,
         "rentalCost": 280,
         "shuttleAmount": 6,
         "shuttlePrice": 305,
@@ -56,7 +56,7 @@ class PracticeSessionService:
         self._session_cost_model = session_cost_model
 
         # self.players = players
-        if billing_type is BillingTypes.WEIGHTED:
+        if billing_type == BillingTypes.WEIGHTED.value:
             weighted = self._session_cost_model.weighted_data
             self._session_cost_model.clean_players()
             self._session_cost_model.check_players_unique()
@@ -72,8 +72,8 @@ class PracticeSessionService:
         self.date = None
 
         self._strategies = {
-            BillingTypes.WEIGHTED: self._calc_cost_weighted,
-            BillingTypes.EQUALLY: self._calc_cost_equally,
+            BillingTypes.WEIGHTED.value: self._calc_cost_weighted,
+            BillingTypes.EQUALLY.value: self._calc_cost_equally,
         }
 
     def calc_cost_amount(self) -> dict:

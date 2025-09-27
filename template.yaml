@@ -13,6 +13,10 @@ Globals:
         ENV: aws
     LoggingConfig:
       LogFormat: JSON
+  HttpApi:
+    Auth:
+      Authorizer: NONE
+
 Resources:
   BadmintonRechargingRole:
     Type: AWS::IAM::Role
@@ -56,24 +60,6 @@ Resources:
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
         AllowOrigin: "'*'"
 
-
-  #  DefaultCachePolicy:
-#    Type: AWS::CloudFront::CachePolicy
-#    Properties:
-#      CachePolicyConfig:
-#        Name: DefaultCachePolicy
-#        DefaultTTL: 3600
-#        MinTTL: 0
-#        MaxTTL: 86400
-#        ParametersInCacheKeyAndForwardedToOrigin:
-#          EnableAcceptEncodingGzip: true
-#          HeadersConfig:
-#            HeaderBehavior: none  # Or 'whitelist', and specify headers if needed
-#          CookiesConfig:
-#            CookieBehavior: none  # Or 'whitelist', and specify cookies if needed
-#          QueryStringsConfig:
-#            QueryStringBehavior: all  # Or 'whitelist', and specify query strings
-
   SwaggerFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -85,7 +71,7 @@ Resources:
         SwaggerGet:
           Type: Api
           Properties:
-            Path: /swagger-ui
+            Path: /api/swagger-ui
             Method: get
             RestApiId: !Ref ApiBadmintonRechargingDeployment
 
@@ -101,25 +87,25 @@ Resources:
         getSessionTemplates:
           Type: Api
           Properties:
-            Path: /sessions/templates
+            Path: /api/sessions/templates
             Method: get
             RestApiId: !Ref ApiBadmintonRechargingDeployment
         getBillingTypes:
           Type: Api
           Properties:
-            Path: /sessions/billing-types
+            Path: /api/sessions/billing-types
             Method: get
             RestApiId: !Ref ApiBadmintonRechargingDeployment
         postCalcCostEqually:
           Type: Api
           Properties:
-            Path: /sessions/calc-cost-equally
+            Path: /api/sessions/calc-cost-equally
             Method: post
             RestApiId: !Ref ApiBadmintonRechargingDeployment
         postCalcCostWeighted:
           Type: Api
           Properties:
-            Path: /sessions/calc-cost-weighted
+            Path: /api/sessions/calc-cost-weighted
             Method: post
             RestApiId: !Ref ApiBadmintonRechargingDeployment
 
