@@ -104,6 +104,12 @@ Resources:
             Path: /sessions/templates
             Method: get
             RestApiId: !Ref ApiBadmintonRechargingDeployment
+        getBillingTypes:
+          Type: Api
+          Properties:
+            Path: /sessions/billing-types
+            Method: get
+            RestApiId: !Ref ApiBadmintonRechargingDeployment
         postCalcCostEqually:
           Type: Api
           Properties:

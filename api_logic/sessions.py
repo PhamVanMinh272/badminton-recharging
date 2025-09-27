@@ -11,7 +11,7 @@ def get_session_templates(**kwargs):
 
 def calc_cost_api_logic(**kwargs):
     session_data = SessionCostWeighted(**kwargs)
-    bill_result = PracticeSessionService(BillingTypes.WEIGHTED, session_data).calc_cost_amount()
+    bill_result = PracticeSessionService(BillingTypes.WEIGHTED.value, session_data).calc_cost_amount()
     return {"data": {
         "cost": bill_result,
         "sessionDate": datetime.date.today().strftime("%Y-%m-%d")
@@ -20,9 +20,15 @@ def calc_cost_api_logic(**kwargs):
 
 def calc_cost_equally(**kwargs):
     session_data = SessionCostEqually(**kwargs)
-    bill_result = PracticeSessionService(BillingTypes.EQUALLY, session_data).calc_cost_amount()
+    bill_result = PracticeSessionService(BillingTypes.EQUALLY.value, session_data).calc_cost_amount()
 
     return {"data": {
         "cost": bill_result,
         "sessionDate": datetime.date.today().strftime("%Y-%m-%d")
     }}
+
+
+def get_billing_types(**kwargs):
+    billing_types = PracticeSessionService.get_billing_types()
+
+    return {"data": billing_types}

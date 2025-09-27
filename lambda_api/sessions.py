@@ -9,6 +9,7 @@ def lambda_handler(event, context):
 
     get_paths = {
         "/sessions/templates": sessions.get_session_templates,
+        "/sessions/billing-types": sessions.get_billing_types,
     }
     post_paths = {
         "/sessions/calc-cost-weighted": sessions.calc_cost_api_logic,

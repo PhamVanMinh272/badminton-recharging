@@ -18,3 +18,7 @@ def calc_cost_equally():
     data = request.json
     return sessions.calc_cost_equally(**data)
 
+@session_router.route("/billing-types", methods=['GET'])
+def get_billing_types():
+    return sessions.get_billing_types()
+

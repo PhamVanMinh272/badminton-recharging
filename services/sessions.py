@@ -133,3 +133,9 @@ class PracticeSessionService:
                 )
 
         return billed_players
+
+    @classmethod
+    def get_billing_types(cls) -> list[dict]:
+        return [{
+            "name": e.name, "id": e.value
+        } for e in BillingTypes]
