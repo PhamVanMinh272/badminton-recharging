@@ -16,6 +16,9 @@ Globals:
   HttpApi:
     Auth:
       Authorizer: NONE
+  Environment:
+    Variables:
+      ENV: dev
 
 Resources:
   BadmintonRechargingRole:
