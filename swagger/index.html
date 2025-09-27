@@ -1,25 +1,8 @@
-import os
-from logging import getLogger
-
-os.environ["ENV"] = "dev"
-application_name = "Badminton Recharging Swagger UI"
-env_name = os.environ["ENV"]
-
-logger = getLogger(__name__)
-
-
-def lambda_handler(event, context):
-    with open("snail-dev-oas30.json") as f:
-        swagger_doc = f.read()
-        logger.info("Read file")
-
-    body = generate_swagger_page_body(swagger_doc, application_name)
-    return {"statusCode": 200, "headers": {"Content-Type": "text/html"}, "body": body}
-
-
-def generate_swagger_page_body(swagger_doc, app_name):
-    return """
-    <html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><html>
   <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui.css" >
@@ -38,7 +21,7 @@ def generate_swagger_page_body(swagger_doc, app_name):
     <script>
       window.onload = function() {
         const ui = SwaggerUIBundle({
-          spec: %(spec)s,
+          spec: spec,
           dom_id: '#swagger-ui',
           deepLinking: true,
           presets: [
@@ -55,6 +38,9 @@ def generate_swagger_page_body(swagger_doc, app_name):
       }
   </script>
   </body>
-</html>""" % {
-        "spec": swagger_doc
-    }
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

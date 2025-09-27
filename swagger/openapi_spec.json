@@ -1,0 +1,96 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Badminton Recharging",
+    "version" : "1.0"
+  },
+  "servers" : [ {
+    "url" : "https://nno3q5ecp6.execute-api.us-west-2.amazonaws.com/Stage/{basePath}",
+    "variables" : {
+      "basePath" : {
+        "default" : "dev"
+      }
+    }
+  } ],
+  "paths" : {
+    "/sessions/templates" : {
+      "get" : {
+        "tags": ["Practice Session"],
+        "responses": {}
+      }
+    },
+    "/sessions/calc-cost-equally" : {
+      "post" : {
+        "tags": ["Practice Session"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/sessionCalcCostEqually"
+              }
+            }
+          }
+        },
+        "responses": {}
+      }
+    },
+    "/sessions/calc-cost-weighted" : {
+      "post" : {
+        "tags": ["Practice Session"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/sessionCalcCostWeighted"
+              }
+            }
+          }
+        },
+        "responses": {}
+      }
+    }
+    },
+  "components" : {
+    "schemas": {
+      "sessionCalcCostEqually": {
+        "type": "object",
+        "properties": {
+          "numberOfPlayers": {
+            "type": "integer"
+          },
+          "rentalPrice": {
+            "type": "integer"
+          },
+          "shuttleAmount": {
+            "type": "integer"
+          },
+          "shuttlePrice": {
+            "type": "integer"
+          }
+        }
+      },
+      "sessionCalcCostWeighted": {
+        "type": "object",
+        "properties": {
+          "players": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "rentalPrice": {
+              "type": "integer"
+            },
+            "shuttleAmount": {
+              "type": "integer"
+            },
+            "shuttlePrice": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}
