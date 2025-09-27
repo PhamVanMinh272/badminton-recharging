@@ -50,6 +50,73 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ec2:CreateNetworkInterface
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DeleteNetworkInterface
+                Resource: "*"
+
+
+
+  #  LambdaSecurityGroup:
+#    Type: AWS::EC2::SecurityGroup
+#    Properties:
+#      GroupDescription: Security group for Lambda to access EFS
+#      VpcId: vpc-0ee4f4a5109456563
+#      SecurityGroupIngress:
+#        - IpProtocol: tcp
+#          FromPort: 2049
+#          ToPort: 2049
+##          SourceSecurityGroupId: !Ref LambdaSecurityGroup
+#      Tags:
+#        - Key: Name
+#          Value: LambdaEFSAccess
+
+  LambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Lambda access to EFS
+      VpcId: vpc-0ee4f4a5109456563
+
+  EFSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: EFS ingress from Lambda
+      VpcId: vpc-0ee4f4a5109456563
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          SourceSecurityGroupId: !Ref LambdaSecurityGroup
+
+  BadmintonRechargingEFS:
+    Type: AWS::EFS::FileSystem
+    Properties:
+      Encrypted: true
+      PerformanceMode: generalPurpose
+
+  EFSMountTarget:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref BadmintonRechargingEFS
+      SubnetId: subnet-0c6d1e1b83be3be52
+      SecurityGroups:
+        - !Ref EFSSecurityGroup
+
+  BadmintonRechargingDBAccessPoint:
+    Type: AWS::EFS::AccessPoint
+    Properties:
+      FileSystemId: !Ref BadmintonRechargingEFS
+      PosixUser:
+        Uid: "1000"
+        Gid: "1000"
+      RootDirectory:
+        CreationInfo:
+          OwnerGid: "1000"
+          OwnerUid: "1000"
+          Permissions: "750"
+        Path: "/lambda"
 
   ApiBadmintonRechargingDeployment:
     Type: AWS::Serverless::Api
@@ -83,6 +150,14 @@ Resources:
       Handler: lambda_api/sessions.lambda_handler
       Architectures:
         - x86_64
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSecurityGroup
+        SubnetIds:
+          - subnet-0c6d1e1b83be3be52
+      FileSystemConfigs:
+        - Arn: !GetAtt BadmintonRechargingDBAccessPoint.Arn
+          LocalMountPath: /mnt/efs
       Events:
         getSessionTemplates:
           Type: Api
@@ -108,4 +183,61 @@ Resources:
             Path: /api/sessions/calc-cost-weighted
             Method: post
             RestApiId: !Ref ApiBadmintonRechargingDeployment
+
+  EFSHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !GetAtt BadmintonRechargingRole.Arn
+      CodeUri: ./
+      Handler: lambda_api/efs_handler.lambda_handler
+      Architectures:
+        - x86_64
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSecurityGroup
+        SubnetIds:
+          - subnet-0c6d1e1b83be3be52
+      FileSystemConfigs:
+        - Arn: !GetAtt BadmintonRechargingDBAccessPoint.Arn
+          LocalMountPath: /mnt/efs
+
+
+#  SessionsFunctionV2:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      Role: !GetAtt BadmintonRechargingRole.Arn
+#      CodeUri: ./
+#      Handler: lambda_api/sessions.lambda_handler
+#      Architectures:
+#        - x86_64
+#      VpcConfig:
+#        SecurityGroupIds:
+#          - !Ref LambdaSecurityGroup
+#        SubnetIds:
+#          - subnet-0c6d1e1b83be3be52
+#      Events:
+#        getSessionTemplates:
+#          Type: Api
+#          Properties:
+#            Path: /api/sessions/templates
+#            Method: get
+#            RestApiId: !Ref ApiBadmintonRechargingDeployment
+#        getBillingTypes:
+#          Type: Api
+#          Properties:
+#            Path: /api/sessions/billing-types
+#            Method: get
+#            RestApiId: !Ref ApiBadmintonRechargingDeployment
+#        postCalcCostEqually:
+#          Type: Api
+#          Properties:
+#            Path: /api/sessions/calc-cost-equally
+#            Method: post
+#            RestApiId: !Ref ApiBadmintonRechargingDeployment
+#        postCalcCostWeighted:
+#          Type: Api
+#          Properties:
+#            Path: /api/sessions/calc-cost-weighted
+#            Method: post
+#            RestApiId: !Ref ApiBadmintonRechargingDeployment
 

@@ -3,8 +3,8 @@ from common.enum import BillingTypes
 from schema.pydantic_models.session import SessionCost
 
 players = {
-    "C Ân": {"level": 8, "weight": 0.8},
-    "Giao": {"level": 6, "weight": 0.8},
+    "C Ân": {"weight": 0.8},
+    "Giao": {"weight": 0.8},
 }
 
 SESSION_TEMPLATE_DATA = [
