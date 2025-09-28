@@ -70,4 +70,3 @@ class SessionCostWeighted(SessionCost):
 
 class SessionCostEqually(SessionCost):
     numberOfPlayers: int
-

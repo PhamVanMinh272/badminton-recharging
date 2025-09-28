@@ -2,6 +2,7 @@ import os
 import sqlite3
 from settings import SQLITE_PATH, logger
 
+
 def connect_db(db_path: str = SQLITE_PATH):
     logger.info(f"Attempting to connect to database at: {db_path}")
     if not os.path.exists(db_path):

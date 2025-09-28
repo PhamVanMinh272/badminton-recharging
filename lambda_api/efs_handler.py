@@ -12,11 +12,12 @@ def run_ddl():
     conn = connect_db(SQLITE_PATH)
     cursor = conn.cursor()
 
-    with open(DDL_PATH, 'r') as file:
+    with open(DDL_PATH, "r") as file:
         ddl_script = file.read()
     cursor.executescript(ddl_script)
     conn.commit()
     conn.close()
+
 
 def run_dml():
     """
@@ -27,13 +28,14 @@ def run_dml():
     conn = connect_db(SQLITE_PATH)
     cursor = conn.cursor()
 
-    with open(DML_PATH, encoding='utf-8', errors='replace') as file:
+    with open(DML_PATH, encoding="utf-8", errors="replace") as file:
         dml_script = file.read()
         print(dml_script)
         logger.info("Loaded sql script")
     cursor.executescript(dml_script)
     conn.commit()
     conn.close()
+
 
 def remove_db_file():
     """Remove the SQLite database file."""
@@ -46,10 +48,10 @@ def remove_db_file():
 
 def push_to_s3():
     logger.info("Pushing to S3 ...")
-    s3 = boto3.client('s3')
-    bucket_name = 'badminton-recharging-website'
-    s3_key = 'bmt_recharging.db'
-    file_path = '/mnt/efs/bmt_recharging.db'
+    s3 = boto3.client("s3")
+    bucket_name = "badminton-recharging-website"
+    s3_key = "bmt_recharging.db"
+    file_path = "/mnt/efs/bmt_recharging.db"
     logger.info(f"Checking file at path: {file_path}")
 
     if os.path.exists(file_path):
@@ -75,14 +77,11 @@ def push_to_s3():
         # with open(local_path, 'rb') as f:
         s3.upload_file(file_path, bucket_name, s3_key)
         return {
-            'statusCode': 200,
-            'body': f'Successfully uploaded to s3://{bucket_name}/{s3_key}'
+            "statusCode": 200,
+            "body": f"Successfully uploaded to s3://{bucket_name}/{s3_key}",
         }
     except Exception as e:
-        return {
-            'statusCode': 500,
-            'body': str(e)
-        }
+        return {"statusCode": 500, "body": str(e)}
 
 
 def init_db():
@@ -90,10 +89,7 @@ def init_db():
     initialize_db()
     run_ddl()
     run_dml()
-    return {
-        "statusCode": 200,
-        "body": json.dumps("Initialized DB")
-    }
+    return {"statusCode": 200, "body": json.dumps("Initialized DB")}
 
 
 db_strategies = {
@@ -101,15 +97,19 @@ db_strategies = {
     "init_db": init_db,
     "run_ddl": run_ddl,
     "run_dml": run_dml,
-    "push_to_s3": push_to_s3
+    "push_to_s3": push_to_s3,
 }
+
 
 def get_help():
     return {
         "statusCode": 200,
-        "body": json.dumps({
-            "message": "task_type field required with available value: " + ", ".join(db_strategies.keys())
-        })
+        "body": json.dumps(
+            {
+                "message": "task_type field required with available value: "
+                + ", ".join(db_strategies.keys())
+            }
+        ),
     }
 
 
@@ -121,20 +121,12 @@ def lambda_handler(event, context):
             return get_help()
         result = db_strategies[task_type]()
         logger.info("Result: " + str(result))
-        return {
-            "statusCode": 200,
-            "body": json.dumps("Done " + task_type)
-        }
+        return {"statusCode": 200, "body": json.dumps("Done " + task_type)}
     except Exception as e:
-        return {
-            "statusCode": 500,
-            "body": json.dumps({"error": str(e)})
-        }
+        return {"statusCode": 500, "body": json.dumps({"error": str(e)})}
 
 
 if __name__ == "__main__":
     # Test event
-    test_event = {
-        "task_type": "run_ddl"
-    }
+    test_event = {"task_type": "run_ddl"}
     print(lambda_handler(test_event, None))

@@ -23,7 +23,8 @@ class PracticeSessionService:
             self._session_cost_model.check_players_unique()
 
             self._active_players = [
-                {"name": name, "weight": weight} if weight != 1 else {"name": name} for name, weight in zip(self._session_cost_model.players, weighted)
+                {"name": name, "weight": weight} if weight != 1 else {"name": name}
+                for name, weight in zip(self._session_cost_model.players, weighted)
             ]
             # retreive weight from players list
             for player in self._active_players:
@@ -98,6 +99,4 @@ class PracticeSessionService:
 
     @classmethod
     def get_billing_types(cls) -> list[dict]:
-        return [{
-            "name": e.name, "id": e.value
-        } for e in BillingTypes]
+        return SessionRepo.get_billing_types()

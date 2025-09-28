@@ -1,4 +1,3 @@
-
 from flask import Flask
 from flask_cors import CORS
 
@@ -10,11 +9,9 @@ from swagger.flask_main import swagger_bp
 app = Flask(__name__)
 CORS(app)
 
-app.register_blueprint(swagger_bp, url_prefix='/api/swagger')
-app.register_blueprint(session_router, url_prefix='/api/sessions')
-app.register_blueprint(players_router, url_prefix='/api/players')
+app.register_blueprint(swagger_bp, url_prefix="/api/swagger")
+app.register_blueprint(session_router, url_prefix="/api/sessions")
+app.register_blueprint(players_router, url_prefix="/api/players")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
-
-

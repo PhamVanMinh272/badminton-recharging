@@ -19,6 +19,13 @@
         "security": []
       }
     },
+    "/sessions/attributes-data" : {
+      "get" : {
+        "tags": ["Practice Session"],
+        "responses": {},
+        "security": []
+      }
+    },
     "/sessions/calc-cost-equally" : {
       "post" : {
         "tags": ["Practice Session"],

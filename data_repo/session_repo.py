@@ -41,3 +41,13 @@ class SessionRepo:
             for row in rows
         ]
         return players
+
+    @classmethod
+    def get_billing_types(cls) -> list[dict]:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, name FROM billing_type")
+        rows = cursor.fetchall()
+        conn.close()
+        billing_types = [{"id": row[0], "name": row[1]} for row in rows]
+        return billing_types

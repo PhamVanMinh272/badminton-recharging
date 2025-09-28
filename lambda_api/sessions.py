@@ -11,6 +11,7 @@ def lambda_handler(event, context):
     get_paths = {
         "/api/sessions/templates": sessions.get_session_templates,
         "/api/sessions/billing-types": sessions.get_billing_types,
+        "/api/sessions/attributes-data": sessions.get_session_attributes_data,
     }
     post_paths = {
         "/api/sessions/calc-cost-weighted": sessions.calc_cost_api_logic,
@@ -34,16 +35,22 @@ def lambda_handler(event, context):
         raise Exception("Not found")
     return result
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     event = {
-        "body": json.dumps({
-            "players": [
-                "Đạt", "Thảo", "Văn", "Huy", "Vu", "Thinh"
-            ],
-            "numberOfPlayers": 6,
-            "rentalCost": 200, "shuttleAmount": 3, "shuttlePrice": 26}),
-        "path": "/api/sessions/calc-cost-equally",
-        "httpMethod": "POST"
+        "body": json.dumps(
+            {
+                "players": ["Đạt", "Thảo", "Văn", "Huy", "Vu", "Thinh"],
+                "numberOfPlayers": 6,
+                "rentalCost": 200,
+                "shuttleAmount": 3,
+                "shuttlePrice": 26,
+            }
+        ),
+        "path": "/api/sessions/attributes-data",
+        "httpMethod": "GET",
     }
     response = lambda_handler(event, None)
-    print(response)
+    body = response["body"]
+    body_json = json.loads(body)
+    print(json.dumps(body_json, indent=4, ensure_ascii=False))

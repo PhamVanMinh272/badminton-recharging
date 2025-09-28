@@ -9,9 +9,7 @@ from settings import logger
 @exception_handler
 def lambda_handler(event, context):
 
-    get_paths = {
-        "/api/players": players.get_players
-    }
+    get_paths = {"/api/players": players.get_players}
     post_paths = {}
 
     path = event.get("path", "")
@@ -31,18 +29,22 @@ def lambda_handler(event, context):
         raise Exception("Not found")
     return result
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     event = {
-        "body": json.dumps({
-            "players": [
-                "Đạt", "Thảo", "Văn", "Huy", "Vu", "Thinh"
-            ],
-            "numberOfPlayers": 6,
-            "rentalCost": 200, "shuttleAmount": 3, "shuttlePrice": 26}),
+        "body": json.dumps(
+            {
+                "players": ["Đạt", "Thảo", "Văn", "Huy", "Vu", "Thinh"],
+                "numberOfPlayers": 6,
+                "rentalCost": 200,
+                "shuttleAmount": 3,
+                "shuttlePrice": 26,
+            }
+        ),
         "path": "/api/players",
-        "httpMethod": "GET"
+        "httpMethod": "GET",
     }
     response = lambda_handler(event, None)
-    body = response['body']
+    body = response["body"]
     body_json = json.loads(body)
     print(json.dumps(body_json, indent=4, ensure_ascii=False))
