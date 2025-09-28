@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS template (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     rental_cost REAL NOT NULL DEFAULT 0.0,
-    shuttleAmount INTEGER NOT NULL DEFAULT 0,
-    shuttlePrice REAL NOT NULL DEFAULT 0.0,
+    shuttle_amount INTEGER NOT NULL DEFAULT 0,
+    shuttle_price REAL NOT NULL DEFAULT 0.0,
     billing_type_id INTEGER NOT NULL,
     FOREIGN KEY (billing_type_id) REFERENCES billing_type(id)
 );

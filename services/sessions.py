@@ -1,6 +1,7 @@
 import math
 from common.enum import BillingTypes
 from schema.pydantic_models.session import SessionCost
+from data_repo.session_repo import SessionRepo
 
 players = {
     "C Ân": {"weight": 0.8},
@@ -82,7 +83,8 @@ class PracticeSessionService:
 
     @classmethod
     def get_session_templates(cls):
-        return SESSION_TEMPLATE_DATA
+        # return SESSION_TEMPLATE_DATA
+        return SessionRepo().get_all_templates()
 
     def _re_calc_shuttle_price(self):
         """

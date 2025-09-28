@@ -54,7 +54,8 @@
     "/players" : {
       "get" : {
         "tags": ["Players"],
-        "responses": {}
+        "responses": {},
+        "security": []
       }
     }
   },

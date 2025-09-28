@@ -142,6 +142,30 @@ Resources:
             Method: get
             RestApiId: !Ref ApiBadmintonRechargingDeployment
 
+  PlayersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !GetAtt BadmintonRechargingRole.Arn
+      CodeUri: ./
+      Handler: lambda_api/players.lambda_handler
+      Architectures:
+        - x86_64
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSecurityGroup
+        SubnetIds:
+          - subnet-0c6d1e1b83be3be52
+      FileSystemConfigs:
+        - Arn: !GetAtt BadmintonRechargingDBAccessPoint.Arn
+          LocalMountPath: /mnt/efs
+      Events:
+        getPlayers:
+          Type: Api
+          Properties:
+            Path: /api/players
+            Method: get
+            RestApiId: !Ref ApiBadmintonRechargingDeployment
+
   SessionsFunction:
     Type: AWS::Serverless::Function
     Properties:

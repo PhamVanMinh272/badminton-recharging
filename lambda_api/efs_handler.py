@@ -3,7 +3,7 @@ import json
 import os
 import boto3
 
-from common.db_connection import connect_db
+from common.db_connection import connect_db, initialize_db
 from settings import SQLITE_PATH, DDL_PATH, DML_PATH, logger
 
 
@@ -34,6 +34,14 @@ def run_dml():
     cursor.executescript(dml_script)
     conn.commit()
     conn.close()
+
+def remove_db_file():
+    """Remove the SQLite database file."""
+    if os.path.exists(SQLITE_PATH):
+        os.remove(SQLITE_PATH)
+        logger.info(f"Removed database file at: {SQLITE_PATH}")
+    else:
+        logger.info("Database file does not exist, nothing to remove.")
 
 
 def push_to_s3():
@@ -77,7 +85,20 @@ def push_to_s3():
         }
 
 
+def init_db():
+    remove_db_file()
+    initialize_db()
+    run_ddl()
+    run_dml()
+    return {
+        "statusCode": 200,
+        "body": json.dumps("Initialized DB")
+    }
+
+
 db_strategies = {
+    "remove_db_file": remove_db_file,
+    "init_db": init_db,
     "run_ddl": run_ddl,
     "run_dml": run_dml,
     "push_to_s3": push_to_s3
@@ -114,6 +135,6 @@ def lambda_handler(event, context):
 if __name__ == "__main__":
     # Test event
     test_event = {
-        "task_type": "run_dml"
+        "task_type": "init_db"
     }
     print(lambda_handler(test_event, None))

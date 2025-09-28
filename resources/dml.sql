@@ -21,9 +21,9 @@ INSERT INTO billing_type (id, name) VALUES (2, 'Weight');
 INSERT INTO billing_type (id, name) VALUES (3, 'Custom');
 
 -- Name is unique to avoid duplicate
-INSERT INTO template (name, billing_type_id, rental_cost, shuttleAmount, shuttlePrice) VALUES ('Wednesday', 1, 220, 4, 310);
-INSERT INTO template (name, billing_type_id, rental_cost, shuttleAmount, shuttlePrice) VALUES ('Friday', 2, 280, 4, 310);
-INSERT INTO template (name, billing_type_id, rental_cost, shuttleAmount, shuttlePrice) VALUES ('Sunday', 1, 200, 4, 310);
+INSERT INTO template (name, billing_type_id, rental_cost, shuttle_amount, shuttle_price) VALUES ('Wednesday', 1, 220, 4, 310);
+INSERT INTO template (name, billing_type_id, rental_cost, shuttle_amount, shuttle_price) VALUES ('Friday', 2, 280, 4, 310);
+INSERT INTO template (name, billing_type_id, rental_cost, shuttle_amount, shuttle_price) VALUES ('Sunday', 1, 200, 4, 310);
 
 -- Link players to templates
 INSERT INTO template_player (template_id, player_id) VALUES (1, 3);
@@ -44,10 +44,10 @@ INSERT INTO template_player (template_id, player_id) VALUES (2, 15);
 INSERT INTO template_player (template_id, player_id) VALUES (2, 1);
 INSERT INTO template_player (template_id, player_id) VALUES (2, 2);
 
-INSERT INTO template_player (template_id, player_id) VALUES (1, 3);
-INSERT INTO template_player (template_id, player_id) VALUES (1, 4);
-INSERT INTO template_player (template_id, player_id) VALUES (1, 5);
-INSERT INTO template_player (template_id, player_id) VALUES (1, 6);
-INSERT INTO template_player (template_id, player_id) VALUES (1, 7);
-INSERT INTO template_player (template_id, player_id) VALUES (1, 8);
-INSERT INTO template_player (template_id, player_id) VALUES (1, 9);
+INSERT INTO template_player (template_id, player_id) VALUES (3, 3);
+INSERT INTO template_player (template_id, player_id) VALUES (3, 4);
+INSERT INTO template_player (template_id, player_id) VALUES (3, 5);
+INSERT INTO template_player (template_id, player_id) VALUES (3, 6);
+INSERT INTO template_player (template_id, player_id) VALUES (3, 7);
+INSERT INTO template_player (template_id, player_id) VALUES (3, 8);
+INSERT INTO template_player (template_id, player_id) VALUES (3, 9);
