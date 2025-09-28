@@ -8,46 +8,6 @@ players = {
     "Giao": {"weight": 0.8},
 }
 
-SESSION_TEMPLATE_DATA = [
-    {
-        "id": 1,
-        "name": "Wednesday Regular",
-        "billingType": BillingTypes.EQUALLY.value,
-        "rentalCost": 220,
-        "shuttleAmount": 4,
-        "shuttlePrice": 305,
-        "players": ["Minh", "Đạt", "Thảo", "Tú", "Thinh", "Văn", "Tuyến"],
-    },
-    {
-        "id": 2,
-        "name": "Sunday Regular",
-        "billingType": BillingTypes.EQUALLY.value,
-        "rentalCost": 200,
-        "shuttleAmount": 4,
-        "shuttlePrice": 305,
-        "players": ["Minh", "Đạt", "Thảo", "Tú", "Thinh", "Văn", "Tuyến"],
-    },
-    {
-        "id": 3,
-        "name": "Friday",
-        "billingType": BillingTypes.WEIGHTED.value,
-        "rentalCost": 280,
-        "shuttleAmount": 6,
-        "shuttlePrice": 305,
-        "players": [
-            "Minh",
-            "Đạt",
-            "Thiên",
-            "Tấn",
-            "Thoại",
-            "Tâm",
-            "Toàn",
-            "Giao",
-            "C Ân",
-        ],
-    },
-]
-
 
 class PracticeSessionService:
     def __init__(self, billing_type: int, session_cost_model: SessionCost):

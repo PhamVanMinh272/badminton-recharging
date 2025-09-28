@@ -135,6 +135,6 @@ def lambda_handler(event, context):
 if __name__ == "__main__":
     # Test event
     test_event = {
-        "task_type": "init_db"
+        "task_type": "run_dml"
     }
     print(lambda_handler(test_event, None))
