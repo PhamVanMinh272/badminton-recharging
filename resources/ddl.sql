@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS template (
     shuttle_amount INTEGER NOT NULL DEFAULT 0,
     shuttle_price REAL NOT NULL DEFAULT 0.0,
     billing_type_id INTEGER NOT NULL,
+    shift_time TEXT NOT NULL,
+    location TEXT NOT NULL,
     FOREIGN KEY (billing_type_id) REFERENCES billing_type(id)
 );
 
@@ -31,7 +33,8 @@ CREATE TABLE IF NOT EXISTS practice_session (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     session_date DATETIME NOT NULL,
-    shift_time TEXT
+    shift_time TEXT NOT NULL,
+    location TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS practice_session_player (

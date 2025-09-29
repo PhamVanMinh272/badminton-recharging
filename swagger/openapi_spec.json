@@ -142,7 +142,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "Friday 20:00 - 22:00, sân BE"
+            "example": "Friday 2023-10-20 20:00 - 22:00, sân BE"
           },
           "sessionDate": {
             "type": "string",

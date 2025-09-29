@@ -9,6 +9,7 @@ from settings import SQLITE_PATH, DDL_PATH, DML_PATH, logger
 
 def run_ddl():
     """Run DDL script to create tables in the SQLite database."""
+    logger.info("Running DDL script ...")
     conn = connect_db(SQLITE_PATH)
     cursor = conn.cursor()
 
@@ -24,7 +25,7 @@ def run_dml():
     Run DML script to insert initial data into the SQLite database.
     Make sure to put unique constraints to avoid duplication.
     """
-
+    logger.info("Running DML script ...")
     conn = connect_db(SQLITE_PATH)
     cursor = conn.cursor()
 
@@ -39,6 +40,7 @@ def run_dml():
 
 def remove_db_file():
     """Remove the SQLite database file."""
+    logger.info("Removing DB file ...")
     if os.path.exists(SQLITE_PATH):
         os.remove(SQLITE_PATH)
         logger.info(f"Removed database file at: {SQLITE_PATH}")
@@ -85,6 +87,7 @@ def push_to_s3():
 
 
 def init_db():
+    logger.info("Initializing DB ...")
     remove_db_file()
     initialize_db()
     run_ddl()
@@ -128,5 +131,5 @@ def lambda_handler(event, context):
 
 if __name__ == "__main__":
     # Test event
-    test_event = {"task_type": "run_ddl"}
+    test_event = {"task_type": "init_db"}
     print(lambda_handler(test_event, None))
