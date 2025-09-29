@@ -2,6 +2,17 @@ from common.db_connection import connect_db
 
 
 class SessionRepo:
+
+    @classmethod
+    def get_all_sessions(cls) -> list[dict]:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, name FROM practice_session")
+        rows = cursor.fetchall()
+        conn.close()
+        sections = [{"id": row[0], "name": row[1]} for row in rows]
+        return sections
+
     @classmethod
     def get_all_templates(cls) -> list[dict]:
         conn = connect_db()

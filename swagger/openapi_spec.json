@@ -26,6 +26,14 @@
         "security": []
       }
     },
+    "/sessions" : {
+      "get" : {
+        "summary": "Get all practice sessions",
+        "tags": ["Practice Session"],
+        "responses": {},
+        "security": []
+      }
+    },
     "/sessions/calc-cost-equally" : {
       "post" : {
         "tags": ["Practice Session"],

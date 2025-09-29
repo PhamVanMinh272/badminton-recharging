@@ -5,6 +5,11 @@ from api_logic import sessions
 session_router = Blueprint("session", __name__)
 
 
+@session_router.route("/", methods=["GET"])
+def get_all_sessions():
+    return sessions.get_all_sessions()
+
+
 @session_router.route("/templates", methods=["GET"])
 def get_session_templates():
     return sessions.get_session_templates()

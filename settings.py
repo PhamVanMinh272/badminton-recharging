@@ -20,6 +20,10 @@ if ENV == "local":
     if not os.path.exists(SQLITE_PATH):
         # # run aws lambda in local
         logger.info("Running in lambda local environment")
-        SQLITE_PATH = os.path.join(os.pardir, "resources", "bmt_recharging.db")
-        DDL_PATH = os.path.join(os.pardir, "resources", "ddl.sql")
-        DML_PATH = os.path.join(os.pardir, "resources", "dml.sql")
+        # SQLITE_PATH = os.path.join(os.pardir, "resources", "bmt_recharging.db")
+        # DDL_PATH = os.path.join(os.pardir, "resources", "ddl.sql")
+        # DML_PATH = os.path.join(os.pardir, "resources", "dml.sql")
+        SQLITE_PATH = os.path.join("resources", "bmt_recharging.db")
+        DDL_PATH = os.path.join("resources", "ddl.sql")
+        DML_PATH = os.path.join("resources", "dml.sql")
+

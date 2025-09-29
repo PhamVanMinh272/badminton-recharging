@@ -5,6 +5,11 @@ from services.sessions import PracticeSessionService
 from common.enum import BillingTypes
 
 
+def get_all_sessions(**kwargs):
+    sessions = PracticeSessionService.get_all_sessions()
+    return {"data": sessions}
+
+
 def get_session_templates(**kwargs):
     session_templates = PracticeSessionService.get_session_templates()
     return {"data": session_templates}

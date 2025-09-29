@@ -1,4 +1,6 @@
 import math
+from datetime import datetime, timedelta
+
 from common.enum import BillingTypes
 from schema.pydantic_models.session import SessionCost
 from data_repo.session_repo import SessionRepo
@@ -100,3 +102,38 @@ class PracticeSessionService:
     @classmethod
     def get_billing_types(cls) -> list[dict]:
         return SessionRepo.get_billing_types()
+
+    @classmethod
+    def get_all_sessions(cls):
+        return SessionRepo().get_all_sessions()
+
+    @staticmethod
+    def get_recently_sessions_date():
+        latest_wednesday = PracticeSessionService.get_latest_weekday(2)
+        latest_friday = PracticeSessionService.get_latest_weekday(4)
+        latest_sunday = PracticeSessionService.get_latest_weekday(6)
+        return [
+            {
+                "name": "",
+                "day": "",
+                "date": latest_wednesday.strftime("%Y-%m-%d")
+            },
+            {
+                "name": "",
+                "day": "",
+                "date": latest_sunday.strftime("%Y-%m-%d")
+            },
+            {
+                "name": "",
+                "day": "",
+                "date": latest_friday.strftime("%Y-%m-%d")
+            }
+        ]
+
+    @staticmethod
+    def get_latest_weekday(target_weekday):
+        today = datetime.today()
+        days_ago = (today.weekday() - target_weekday) % 7
+        return today - timedelta(days=days_ago)
+
+

@@ -114,7 +114,7 @@ def get_help():
 
 
 def lambda_handler(event, context):
-    # Example: Read from SQLite (mounted via EFS at /mnt/sqlite/shared.db)
+    # Example: Read from SQLite (mounted via EFS at /mnt/sqlite/bmt_recharging.db)
     try:
         task_type = event.get("task_type", "")
         if not task_type or task_type not in db_strategies:
