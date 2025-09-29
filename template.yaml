@@ -183,6 +183,18 @@ Resources:
         - Arn: !GetAtt BadmintonRechargingDBAccessPoint.Arn
           LocalMountPath: /mnt/efs
       Events:
+        getSessions:
+          Type: Api
+          Properties:
+            Path: /api/sessions
+            Method: get
+            RestApiId: !Ref ApiBadmintonRechargingDeployment
+        getSessionAttributesData:
+          Type: Api
+          Properties:
+            Path: /api/sessions/attributes-data
+            Method: get
+            RestApiId: !Ref ApiBadmintonRechargingDeployment
         getSessionTemplates:
           Type: Api
           Properties:
@@ -194,6 +206,12 @@ Resources:
           Properties:
             Path: /api/sessions/billing-types
             Method: get
+            RestApiId: !Ref ApiBadmintonRechargingDeployment
+        postSessions:
+          Type: Api
+          Properties:
+            Path: /api/sessions
+            Method: post
             RestApiId: !Ref ApiBadmintonRechargingDeployment
         postCalcCostEqually:
           Type: Api
