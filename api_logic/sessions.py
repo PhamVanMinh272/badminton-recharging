@@ -1,6 +1,10 @@
 import datetime
 
-from schema.pydantic_models.session import SessionCostWeighted, SessionCostEqually
+from schema.pydantic_models.session import (
+    SessionCostWeighted,
+    SessionCostEqually,
+    NewSession,
+)
 from services.sessions import PracticeSessionService
 from common.enum import BillingTypes
 
@@ -25,6 +29,12 @@ def get_session_attributes_data(**kwargs):
             "sessionTemplates": PracticeSessionService.get_session_templates(),
         }
     }
+
+
+def add_session(**kwargs):
+    new_session = NewSession(**kwargs)
+    session_id = PracticeSessionService.add_session(new_session.model_dump())
+    return {"data": {"sessionId": session_id}}
 
 
 def calc_cost_api_logic(**kwargs):

@@ -49,6 +49,10 @@ class PracticeSessionService:
         # return SESSION_TEMPLATE_DATA
         return SessionRepo().get_all_templates()
 
+    @classmethod
+    def add_session(cls, session_data: dict) -> int:
+        return SessionRepo.add_session(session_data)
+
     def _re_calc_shuttle_price(self):
         """
         Price can be 1 shuttle or 12 shuttles.
@@ -113,21 +117,9 @@ class PracticeSessionService:
         latest_friday = PracticeSessionService.get_latest_weekday(4)
         latest_sunday = PracticeSessionService.get_latest_weekday(6)
         return [
-            {
-                "name": "",
-                "day": "",
-                "date": latest_wednesday.strftime("%Y-%m-%d")
-            },
-            {
-                "name": "",
-                "day": "",
-                "date": latest_sunday.strftime("%Y-%m-%d")
-            },
-            {
-                "name": "",
-                "day": "",
-                "date": latest_friday.strftime("%Y-%m-%d")
-            }
+            {"name": "", "day": "", "date": latest_wednesday.strftime("%Y-%m-%d")},
+            {"name": "", "day": "", "date": latest_sunday.strftime("%Y-%m-%d")},
+            {"name": "", "day": "", "date": latest_friday.strftime("%Y-%m-%d")},
         ]
 
     @staticmethod
@@ -135,5 +127,3 @@ class PracticeSessionService:
         today = datetime.today()
         days_ago = (today.weekday() - target_weekday) % 7
         return today - timedelta(days=days_ago)
-
-

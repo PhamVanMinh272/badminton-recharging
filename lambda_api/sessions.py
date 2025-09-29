@@ -12,11 +12,12 @@ def lambda_handler(event, context):
         "/api/sessions/templates": sessions.get_session_templates,
         "/api/sessions/billing-types": sessions.get_billing_types,
         "/api/sessions/attributes-data": sessions.get_session_attributes_data,
-        "/api/sessions/": sessions.get_all_sessions,
+        "/api/sessions": sessions.get_all_sessions,
     }
     post_paths = {
         "/api/sessions/calc-cost-weighted": sessions.calc_cost_api_logic,
         "/api/sessions/calc-cost-equally": sessions.calc_cost_equally,
+        "/api/sessions": sessions.add_session,
     }
 
     path = event.get("path", "")

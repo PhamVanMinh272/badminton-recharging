@@ -26,4 +26,3 @@ if ENV == "local":
         SQLITE_PATH = os.path.join("resources", "bmt_recharging.db")
         DDL_PATH = os.path.join("resources", "ddl.sql")
         DML_PATH = os.path.join("resources", "dml.sql")
-

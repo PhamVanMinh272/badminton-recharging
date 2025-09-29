@@ -54,6 +54,25 @@ class SessionRepo:
         return players
 
     @classmethod
+    def add_session(cls, session_data: dict) -> int:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO practice_session (name, session_date, shift_time) VALUES (?, ?, ?)
+            """,
+            (
+                session_data["name"],
+                session_data["sessionDate"],
+                session_data["shiftTime"],
+            ),
+        )
+        session_id = cursor.lastrowid
+        conn.commit()
+        conn.close()
+        return session_id
+
+    @classmethod
     def get_billing_types(cls) -> list[dict]:
         conn = connect_db()
         cursor = conn.cursor()

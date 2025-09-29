@@ -70,3 +70,9 @@ class SessionCostWeighted(SessionCost):
 
 class SessionCostEqually(SessionCost):
     numberOfPlayers: int
+
+
+class NewSession(BaseModel):
+    name: str
+    sessionDate: str  # YYYY-MM-DD
+    shiftTime: str  # 20:00 - 22:00

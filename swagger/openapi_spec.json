@@ -32,6 +32,22 @@
         "tags": ["Practice Session"],
         "responses": {},
         "security": []
+      },
+      "post" : {
+        "summary": "Create a new practice session",
+        "tags": ["Practice Session"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/newSession"
+              }
+            }
+          }
+        },
+        "responses": {},
+        "security": []
       }
     },
     "/sessions/calc-cost-equally" : {
@@ -118,6 +134,23 @@
           "shuttlePrice": {
             "type": "integer",
             "example": 25
+          }
+        }
+      },
+      "newSession": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Friday 20:00 - 22:00, sân BE"
+          },
+          "sessionDate": {
+            "type": "string",
+            "example": "2023-10-20"
+          },
+          "shiftTime": {
+            "type": "string",
+            "example": "20:00 - 22:00"
           }
         }
       }

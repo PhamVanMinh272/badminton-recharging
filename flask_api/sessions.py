@@ -10,6 +10,11 @@ def get_all_sessions():
     return sessions.get_all_sessions()
 
 
+@session_router.route("/", methods=["POST"])
+def add_session():
+    return sessions.add_session(**request.json)
+
+
 @session_router.route("/templates", methods=["GET"])
 def get_session_templates():
     return sessions.get_session_templates()
