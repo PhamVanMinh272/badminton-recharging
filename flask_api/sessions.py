@@ -2,15 +2,16 @@ from flask import request, Blueprint
 
 from api_logic import sessions
 
+
 session_router = Blueprint("session", __name__)
 
 
-@session_router.route("/", methods=["GET"])
+@session_router.route("", methods=["GET"])
 def get_all_sessions():
     return sessions.get_all_sessions()
 
 
-@session_router.route("/", methods=["POST"])
+@session_router.route("", methods=["POST"])
 def add_session():
     return sessions.add_session(**request.json)
 

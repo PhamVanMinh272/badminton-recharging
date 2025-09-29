@@ -140,10 +140,6 @@
       "newSession": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "example": "Friday 2023-10-20 20:00 - 22:00, sân BE"
-          },
           "sessionDate": {
             "type": "string",
             "example": "2023-10-20"
@@ -151,6 +147,10 @@
           "shiftTime": {
             "type": "string",
             "example": "20:00 - 22:00"
+          },
+          "location": {
+            "type": "string",
+            "example": "sân BE"
           }
         }
       }

@@ -1,5 +1,6 @@
 import math
 from datetime import datetime, timedelta
+from typing import Optional
 
 from common.enum import BillingTypes
 from schema.pydantic_models.session import SessionCost
@@ -12,10 +13,16 @@ players = {
 
 
 class PracticeSessionService:
-    def __init__(self, billing_type: int, session_cost_model: SessionCost):
+    def __init__(
+        self,
+        conn,
+        billing_type: Optional[int] = None,
+        session_cost_model: Optional[SessionCost] = None,
+    ):
         """
         :param active_player_names:
         """
+        self._conn = conn
         self._session_cost_model = session_cost_model
 
         # self.players = players
@@ -44,14 +51,12 @@ class PracticeSessionService:
         self._re_calc_shuttle_price()
         return self._strategies[self.billing_type]()
 
-    @classmethod
-    def get_session_templates(cls):
+    def get_session_templates(self):
         # return SESSION_TEMPLATE_DATA
-        return SessionRepo().get_all_templates()
+        return SessionRepo(self._conn).get_all_templates()
 
-    @classmethod
-    def add_session(cls, session_data: dict) -> int:
-        return SessionRepo.add_session(session_data)
+    def add_session(self, session_data: dict) -> int:
+        return SessionRepo(self._conn).add_session(session_data)
 
     def _re_calc_shuttle_price(self):
         """
@@ -103,13 +108,11 @@ class PracticeSessionService:
 
         return billed_players
 
-    @classmethod
-    def get_billing_types(cls) -> list[dict]:
-        return SessionRepo.get_billing_types()
+    def get_billing_types(self) -> list[dict]:
+        return SessionRepo(self._conn).get_billing_types()
 
-    @classmethod
-    def get_all_sessions(cls):
-        return SessionRepo().get_all_sessions()
+    def get_all_sessions(self):
+        return SessionRepo(self._conn).get_all_sessions()
 
     @staticmethod
     def get_recently_sessions_date():

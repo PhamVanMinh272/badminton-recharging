@@ -31,7 +31,6 @@ def run_dml():
 
     with open(DML_PATH, encoding="utf-8", errors="replace") as file:
         dml_script = file.read()
-        print(dml_script)
         logger.info("Loaded sql script")
     cursor.executescript(dml_script)
     conn.commit()

@@ -1,23 +1,35 @@
-from common.db_connection import connect_db
-
-
 class SessionRepo:
 
-    @classmethod
-    def get_all_sessions(cls) -> list[dict]:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, name FROM practice_session")
-        rows = cursor.fetchall()
-        conn.close()
-        sections = [{"id": row[0], "name": row[1]} for row in rows]
+    def __init__(self, conn):
+        self._conn = conn
+        self._cursor = conn.cursor()
+
+    def get_all_sessions(self) -> list[dict]:
+        self._cursor.execute(
+            """
+            SELECT practice_session.id, name, session_date, shift_time, location, bill.id as bill_id, rental_cost, shuttle_amount, shuttle_price
+            FROM practice_session left join bill on practice_session.id = bill.practice_session_id 
+            ORDER BY session_date DESC"""
+        )
+        rows = self._cursor.fetchall()
+        sections = [
+            {
+                "id": row[0],
+                "name": row[1],
+                "sessionDate": row[2],
+                "shiftTime": row[3],
+                "location": [row[4]],
+                "billId": row[5],
+                "rentalCost": row[6] if row[6] else 0,
+                "shuttleAmount": row[7] if row[7] else 0,
+                "shuttlePrice": row[8] if row[8] else 0,
+            }
+            for row in rows
+        ]
         return sections
 
-    @classmethod
-    def get_all_templates(cls) -> list[dict]:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute(
+    def get_all_templates(self) -> list[dict]:
+        self._cursor.execute(
             """
         SELECT 
         template.id,
@@ -37,8 +49,7 @@ class SessionRepo:
         shuttle_price
         """
         )
-        rows = cursor.fetchall()
-        conn.close()
+        rows = self._cursor.fetchall()
         players = [
             {
                 "id": row[0],
@@ -53,31 +64,25 @@ class SessionRepo:
         ]
         return players
 
-    @classmethod
-    def add_session(cls, session_data: dict) -> int:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute(
+    def add_session(self, session_data: dict) -> int:
+        self._cursor.execute(
             """
-            INSERT INTO practice_session (name, session_date, shift_time) VALUES (?, ?, ?)
+            INSERT INTO practice_session (name, session_date, shift_time, location) VALUES (?, ?, ?, ?)
             """,
             (
                 session_data["name"],
                 session_data["sessionDate"],
                 session_data["shiftTime"],
+                session_data["location"],
             ),
         )
-        session_id = cursor.lastrowid
-        conn.commit()
-        conn.close()
+        session_id = self._cursor.lastrowid
+        # commit
+        self._cursor.connection.commit()
         return session_id
 
-    @classmethod
-    def get_billing_types(cls) -> list[dict]:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, name FROM billing_type")
-        rows = cursor.fetchall()
-        conn.close()
+    def get_billing_types(self) -> list[dict]:
+        self._cursor.execute("SELECT id, name FROM billing_type")
+        rows = self._cursor.fetchall()
         billing_types = [{"id": row[0], "name": row[1]} for row in rows]
         return billing_types

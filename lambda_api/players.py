@@ -1,5 +1,4 @@
 import json
-import os
 
 from api_logic import players
 from common.api_utils import exception_handler

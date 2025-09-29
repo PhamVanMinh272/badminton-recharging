@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Annotated
 
 from pydantic import BaseModel, computed_field, AfterValidator
@@ -73,6 +74,14 @@ class SessionCostEqually(SessionCost):
 
 
 class NewSession(BaseModel):
-    name: str
     sessionDate: str  # YYYY-MM-DD
     shiftTime: str  # 20:00 - 22:00
+    location: str  # e.g., "sân BE"
+
+    @computed_field
+    @property
+    def name(self) -> str:
+        # Convert sessionDate to datetime object
+        date_obj = datetime.strptime(self.sessionDate, "%Y-%m-%d")
+        weekday = date_obj.strftime("%A")  # e.g., "Friday"
+        return f"{weekday} {self.sessionDate} {self.shiftTime}, {self.location}"

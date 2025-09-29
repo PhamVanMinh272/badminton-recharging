@@ -13,5 +13,13 @@ app.register_blueprint(swagger_bp, url_prefix="/api/swagger")
 app.register_blueprint(session_router, url_prefix="/api/sessions")
 app.register_blueprint(players_router, url_prefix="/api/players")
 
+
+# app exit handler
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    # should close db session here
+    pass
+
+
 if __name__ == "__main__":
     app.run(debug=True)

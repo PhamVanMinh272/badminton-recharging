@@ -7,6 +7,17 @@ Output Summary – Show who owes how much.
 
 Swagger ui: https://nno3q5ecp6.execute-api.us-west-2.amazonaws.com/Stage/api/swagger
 
+Running locally:
+1. Install dependencies
+pip install -r requirements.txt
+2. Run the application
+> python run main.py
+
+3. Run lambda function locally
+Run handler /lambda_api/sessions.py
+In working directory of Pycharm config, set to /badminton_recharging (not badminton_recharging/lambda_api)
+
+
 Problem:
 1. Create python layer:
 pip install <libs> -t python
