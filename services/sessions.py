@@ -1,6 +1,7 @@
 import math
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from typing import Optional
+import calendar
 
 from common.enum import BillingTypes
 from schema.pydantic_models.session import SessionCost
@@ -52,8 +53,37 @@ class PracticeSessionService:
         return self._strategies[self.billing_type]()
 
     def get_session_templates(self):
-        # return SESSION_TEMPLATE_DATA
-        return SessionRepo(self._conn).get_all_templates()
+        templates = SessionRepo(self._conn).get_all_templates()
+        for template in templates:
+            template.update(
+                {
+                    "latestDate": self.get_latest_date(template["day"]),
+                    "day": calendar.day_name[template["day"] - 2],
+                }
+            )
+        return templates
+
+    @staticmethod
+    def get_latest_date(day_index: int):
+        """
+        Get latest day by day index
+        :param day_index:
+        :return:
+        """
+        day_index_map = {
+            2: calendar.MONDAY,
+            3: calendar.TUESDAY,
+            4: calendar.WEDNESDAY,
+            5: calendar.THURSDAY,
+            6: calendar.FRIDAY,
+            7: calendar.SATURDAY,
+            8: calendar.SUNDAY,
+        }
+
+        today = date.today()
+        offset = (today.weekday() - day_index_map[day_index]) % 7
+        last_target_day = today - timedelta(days=offset)
+        return last_target_day.strftime("%Y-%m-%d")
 
     def add_session(self, session_data: dict) -> int:
         return SessionRepo(self._conn).add_session(session_data)

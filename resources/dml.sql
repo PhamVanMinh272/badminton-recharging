@@ -21,9 +21,9 @@ INSERT INTO billing_type (id, name) VALUES (2, 'Weight');
 INSERT INTO billing_type (id, name) VALUES (3, 'Custom');
 
 -- Name is unique to avoid duplicate
-INSERT INTO template (name, billing_type_id, rental_cost, shuttle_amount, shuttle_price, shift_time, location) VALUES ('Wednesday', 1, 220, 4, 310, "20:00-22:00", "Sân Tân Sơn 717");
-INSERT INTO template (name, billing_type_id, rental_cost, shuttle_amount, shuttle_price, shift_time, location) VALUES ('Friday', 2, 280, 4, 310, "20:00-22:00", "Sân BE");
-INSERT INTO template (name, billing_type_id, rental_cost, shuttle_amount, shuttle_price, shift_time, location) VALUES ('Sunday', 1, 200, 4, 310, "18:00-20:00", "Sân Khang An");
+INSERT INTO template (name, billing_type_id, rental_cost, shuttle_amount, shuttle_price, day_index, shift_time, location) VALUES ('Wednesday', 1, 220, 4, 310, 4, "20:00-22:00", "Sân Tân Sơn 717");
+INSERT INTO template (name, billing_type_id, rental_cost, shuttle_amount, shuttle_price, day_index, shift_time, location) VALUES ('Friday', 2, 280, 4, 310, 6, "20:00-22:00", "Sân BE");
+INSERT INTO template (name, billing_type_id, rental_cost, shuttle_amount, shuttle_price, day_index, shift_time, location) VALUES ('Sunday', 1, 200, 4, 310, 8, "18:00-20:00", "Sân Khang An");
 
 -- Link players to templates
 INSERT INTO template_player (template_id, player_id) VALUES (1, 3);

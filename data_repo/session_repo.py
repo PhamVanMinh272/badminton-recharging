@@ -38,6 +38,7 @@ class SessionRepo:
         rental_cost,
         shuttle_amount,
         shuttle_price,
+        day_index,
         GROUP_CONCAT(player.name, ',') as player_name FROM template
         join template_player on template.id = template_player.template_id
         join player on template_player.player_id = player.id
@@ -58,7 +59,8 @@ class SessionRepo:
                 "rentalCost": row[3],
                 "shuttleAmount": row[4],
                 "shuttlePrice": row[5],
-                "players": [i for i in row[6].split(",") if i],
+                "day": row[6],
+                "players": [i for i in row[7].split(",") if i],
             }
             for row in rows
         ]
