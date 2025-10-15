@@ -42,3 +42,8 @@ Example:
 - Create VPC, Subnet, Security Group (VPC, Subnet create by AWS console)
 - Create EFS, mount target, AccessPoint (AWS Cloudformation template)
 - Create lambda function in VPC
+
+4. Unit test
+- pip install pytest pytest-mock pytest-cov
+- > pytest
+- > pytest --cov=api_logic --cov-report=html
